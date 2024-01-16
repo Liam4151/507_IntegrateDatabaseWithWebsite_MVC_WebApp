@@ -1,0 +1,31 @@
+﻿@using Microsoft.AspNetCore.Http;
+@model IEnumerable<Product>
+@{
+    ViewData["Title"] = "Home Page";
+
+
+}
+
+@inject IHttpContextAccessor HttpContextAccessor
+
+<div class="card-container">
+    @foreach(var product in Model) 
+    {      
+        <div class="single-card card shadow">
+                <h2>@product.ProductName</h2>
+                <h3>$@product.ProductPrice</h3>
+                <p>@product.ProductDescription</p>
+                <small>Product Code: @product.ProductCode</small>
+                <small>Updated: @product.UpdatedDate</small>
+                @Html.ActionLink("Comments", "CommentList", "Comment", new {id = product.ProductCode }, new {@class= "btn btn-primary m-2" })
+
+                @if (HttpContextAccessor.HttpContext.Session.GetString ("Authenticated") == "True")
+                {
+
+                    @Html.ActionLink("Update","UpdateProduct","Product", new {id = product.ProductCode}, new {@class= "btn btn-primary m-2"})
+                    @Html.ActionLink("Delete","DeleteProduct","Product", new {id = product.ProductCode}, new {@class= "btn btn-danger m-2"})
+                }
+
+       </div>
+    }
+</div>
